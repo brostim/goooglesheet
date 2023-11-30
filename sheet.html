@@ -34,44 +34,57 @@
         <button onclick="addToGoogleSheet()">Add to Google Sheet</button>
     </div>
     <script>
-        const API_KEY = 'YOUR_API_KEY';
-        const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID';
+       
+    const API_KEY = 'AIzaSyBnmJ8t6ZvQZ1-S1drH1-tI3quisfI4sLc';
+    const SPREADSHEET_ID = '1Z3Clqpx-Kc5gAuGVM9cW28APQgwStilZNZxNdPEcV2Y';
+    const GITHUB_PAGES_URL = 'https://brostim.github.io/goooglesheet';
 
-        function addToGoogleSheet() {
-            const dateInput = document.getElementById('dateInput').value;
+    function addToGoogleSheet() {
+        const dateInput = document.getElementById('dateInput').value;
 
-            if (dateInput) {
-                const params = {
-                    values: [[dateInput]],
-                };
+        if (dateInput) {
+            const params = {
+                values: [[dateInput]],
+            };
 
-                gapi.client.sheets.spreadsheets.values.append({
-                    spreadsheetId: SPREADSHEET_ID,
-                    range: 'Sheet1', // Change Sheet1 to your sheet name
-                    valueInputOption: 'RAW',
-                    resource: params,
-                }).then((response) => {
-                    console.log('Date added successfully:', response);
-                }, (error) => {
-                    console.error('Error adding date:', error.result.error.message);
-                });
-            } else {
-                console.error('Please enter a date');
-            }
-        }
-
-        function initClient() {
-            gapi.client.init({
-                apiKey: API_KEY,
-                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-            }).then(() => {
-                console.log('Google Sheets API initialized');
+            gapi.client.sheets.spreadsheets.values.append({
+                spreadsheetId: SPREADSHEET_ID,
+                range: 'Sheet1', // Change Sheet1 to your sheet name
+                valueInputOption: 'RAW',
+                resource: params,
+            }).then((response) => {
+                console.log('Date added successfully:', response);
             }, (error) => {
-                console.error('Error initializing Google Sheets API:', error);
+                console.error('Error adding date:', error.result.error.message);
             });
+        } else {
+            console.error('Please enter a date');
         }
+    }
 
-        gapi.load('client', initClient);
+    function initClient() {
+        gapi.client.init({
+            apiKey: API_KEY,
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+        }).then(() => {
+            console.log('Google Sheets API initialized');
+        }, (error) => {
+            console.error('Error initializing Google Sheets API:', error);
+        });
+    }
+
+    // Load the API client and sign-in
+    gapi.load('client', initClient);
+
+    // Update OAuth configuration with the correct GitHub Pages URL
+    const oauthConfig = {
+        client_id: '847353716196-9usb9627i0is0ctscklf41pi0lcbf6s6.apps.googleusercontent.com',
+        redirect_uri: 'https://brostim.github.io/goooglesheet/sheet.html', // Update with your callback URI
+        // ...
+    };
+
+
+
     </script>
     <script src="https://apis.google.com/js/api.js"></script>
 </body>
