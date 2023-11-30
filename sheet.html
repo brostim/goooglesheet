@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Date Entry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        div {
+            text-align: center;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <label for="dateInput">Enter Date:</label>
+        <input type="date" id="dateInput">
+        <button onclick="addToGoogleSheet()">Add to Google Sheet</button>
+    </div>
+    <script>
+        const API_KEY = 'YOUR_API_KEY';
+        const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID';
+
+        function addToGoogleSheet() {
+            const dateInput = document.getElementById('dateInput').value;
+
+            if (dateInput) {
+                const params = {
+                    values: [[dateInput]],
+                };
+
+                gapi.client.sheets.spreadsheets.values.append({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'Sheet1', // Change Sheet1 to your sheet name
+                    valueInputOption: 'RAW',
+                    resource: params,
+                }).then((response) => {
+                    console.log('Date added successfully:', response);
+                }, (error) => {
+                    console.error('Error adding date:', error.result.error.message);
+                });
+            } else {
+                console.error('Please enter a date');
+            }
+        }
+
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+            }).then(() => {
+                console.log('Google Sheets API initialized');
+            }, (error) => {
+                console.error('Error initializing Google Sheets API:', error);
+            });
+        }
+
+        gapi.load('client', initClient);
+    </script>
+    <script src="https://apis.google.com/js/api.js"></script>
+</body>
+</html>
